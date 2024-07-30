@@ -7,11 +7,13 @@ def get_all_user_agents(session: OAuth2Session):
     res = json.loads(session.get("users/current/user_agents?page=1").text)
     all_user_agents += res["data"]
 
-    max_page = res["total_pages"]
-    for i in range(1, max_page+1):
-        new_res = json.loads(session.get(f"users/current/user_agents?page={i}").text)
-        all_user_agents += new_res["data"]
-        print(f"Done grabbing user agents for page {i}")
+    # Due to a bug in Hakatime, ONLY THE FIRST PAGE USER AGENTS ARE GRABBED, hence why an util for this is required.
+    # This has the effect that old user agents aren't grabbed, and any heartbeat using one of those will fail on add.
+    # max_page = res["total_pages"]
+    # for i in range(1, max_page+1):
+    #     new_res = json.loads(session.get(f"users/current/user_agents?page={i}").text)
+    #     all_user_agents += new_res["data"]
+    #     print(f"Done grabbing user agents for page {i}")
     
     all_user_agents.reverse() # latest last 
     return all_user_agents

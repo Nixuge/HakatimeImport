@@ -2,6 +2,7 @@ import json
 import os
 
 from login.session import get_session
+from utils.edit_file import replace_base_path
 from utils.user_agent_parser import choose_user_agent, get_all_user_agents
 
 
@@ -36,6 +37,8 @@ path = "/home/"
 while not os.path.isfile(path):
     path = input("Please enter the filepath for your exported heartbeats json: ")
 
+print("Loading file...")
+
 with open(path, "r") as f:
     data: dict = json.load(f)
 
@@ -46,9 +49,11 @@ for day in data["days"]:
         first_date = day["date"]
     all_heartbeats[day["date"]] = day["heartbeats"]
 
-print(f"The first date in the list is: {first_date}")
+print(f"First date in the list is {first_date}")
 
 with open("cache/heartbeats_parsed.json", "w") as f:
     json.dump(all_heartbeats, f)
+
+replace_base_path("mitmproxy/redirector.py")
 
 print("All done ! Now continue following the README.")

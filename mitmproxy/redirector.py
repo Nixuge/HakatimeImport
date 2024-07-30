@@ -10,7 +10,7 @@ with open(f"{BASE_PATH}/cache/heartbeats_parsed.json", "r") as f:
 
 available_dates = list(heartbeats.keys())
 
-with open(f"{BASE_PATH}/cache/all_user_agent_ids", "r") as f:
+with open(f"{BASE_PATH}/cache/all_user_agent_ids.json", "r") as f:
     known_uas: list = json.load(f)
 
 with open(f"{BASE_PATH}/cache/default_user_agent", "r") as f:
@@ -24,6 +24,8 @@ def fix_up_data(data):
             if val:
                 heartbeat[prop] = str(val)
 
+        # Without this, old commits with unknown user agents break.
+        # See user_agent_parser.py
         if heartbeat["user_agent_id"] not in known_uas:
             heartbeat["user_agent_id"] = default_ua
 
@@ -44,8 +46,8 @@ def request(flow: http.HTTPFlow) -> None:
 
         res = json.dumps({
             "data": data,
-            "start": f"{date}T00:00:00Z", 
-            "end": f"{date}T23:59:59Z", 
+            "start": f"{date}T00:00:00Z",
+            "end": f"{date}T23:59:59Z",
             "timezone": "Europe/Paris"
         })
 
