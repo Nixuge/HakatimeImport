@@ -1,0 +1,2 @@
+rauth
+mitmproxy # not strictly a requirement but still good to have (might remove since kinda bloated tbh)

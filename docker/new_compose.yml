@@ -1,0 +1,45 @@
+version: "3"
+services:
+  server:
+    container_name: hakatime
+    image: custom-hakatime
+    environment:
+      # DB settings.
+      HAKA_DB_HOST: haka_db
+      HAKA_DB_PORT: 5432
+      HAKA_DB_NAME: test
+      HAKA_DB_PASS: test
+      HAKA_DB_USER: test
+      # Server settings.
+      # Update this with the external endpoint that you use to access hakatime.
+      HAKA_BADGE_URL: "http://localhost:8080"
+      HAKA_PORT: 8080
+      HAKA_SHIELDS_IO_URL: "https://img.shields.io"
+      HAKA_ENABLE_REGISTRATION: "true" # Toggle after you've created your account.
+      # Number of hours after which inactive browser sessions will expire (login required).
+      HAKA_SESSION_EXPIRY: "24"
+      HAKA_LOG_LEVEL: "info" # Control the verbosity of the logger.
+      HAKA_ENV: "dev" # Use a json logger for production.
+      HAKA_HTTP_LOG: "true" # If you want to log http requests.
+      GITHUB_TOKEN: "<token>" # If you want to retrieve time spent per commit. No extra scope is required.
+      # Proxy settings.
+      HTTP_PROXY: "http://172.17.0.1:8082"
+      HTTPS_PROXY: "http://172.17.0.1:8082"
+      NO_PROXY: "localhost,127.0.0.1,haka_db"
+    ports:
+      - "127.0.0.1:8080:8080"
+    depends_on:
+      - haka_db
+      
+  haka_db:
+    container_name: haka_db
+    image: postgres:12-alpine
+    environment:
+      POSTGRES_DB: test
+      POSTGRES_PASSWORD: test
+      POSTGRES_USER: test
+    volumes:
+      - deploy_db_data:/var/lib/postgresql/data
+
+volumes:
+  deploy_db_data: {}
