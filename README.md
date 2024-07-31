@@ -1,6 +1,13 @@
 # HakatimeImport
 A tool to import all of your exported Wakatime heartbeats into Hakatime.
 
+# Before anything else
+You can do this in a self hosted wakapi in a way less jank way.
+
+Self host using https://github.com/muety/wakapi, then on the web panel simply go to Settings/Integrations and paste in your Wakatime API Key.
+
+Once you've done that, you should have the option to "Import Data" (may take a bit of time to load)
+
 # Requirements
 - mitmproxy
 - docker (with docker-compose)
